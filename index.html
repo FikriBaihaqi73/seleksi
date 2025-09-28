@@ -100,14 +100,15 @@
             const cover = document.getElementById("cover").value;
             const sinopsis = document.getElementById("sinopsis").value;
 
-            if (!judul || !penulis || !tahun || !cover || !sinopsis) {
-                alert("Mohon lengkapi semua field yang tersedia");
+            // Validasi tahun harus angka (check this first before other validations)
+            if (tahun && (isNaN(tahun) || tahun.trim() === "")) {
+                alert("Tahun harus berupa angka");
                 return;
             }
 
-            // Validasi tahun harus angka
-            if (isNaN(tahun) || tahun.trim() === "") {
-                alert("Tahun harus angka");
+            // Validasi semua field harus diisi
+            if (!judul || !penulis || !tahun || !cover || !sinopsis) {
+                alert("Mohon lengkapi semua field yang tersedia");
                 return;
             }
 
