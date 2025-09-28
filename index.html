@@ -105,6 +105,12 @@
                 return;
             }
 
+            // Validasi tahun harus angka
+            if (isNaN(tahun) || tahun.trim() === "") {
+                alert("Tahun harus angka");
+                return;
+            }
+
             const bukuBaru = {judul, penulis, tahun, cover, sinopsis};
             
             let isEdit = editIndex !== -1;
