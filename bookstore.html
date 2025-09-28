@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" placeholder="masukkan Judul buku" id="judul" required> 
+        <input type="text" placeholder="masukkan Penulis buku" id="penulis" required> 
+        <input type="number" placeholder="masukkan Tahun" id="tahun" required> 
+        <input type="text" placeholder="masukkan link cover" id="cover" required>
+        <input type="text" placeholder="masukkan sinopsis" id="sinopsis" required>
+        <button id="tambah" onclick="tambah()">Tambah</button>
+        <button onclick="tampilkan()">Tampilkan</button>
+    </div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Penulis</th>
+                <th>Tahun</th>
+                <th>Cover</th>
+                <th>Sinopsis</th>
+                <th colspan="2">Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="buku">
+        </tbody>
+    </table>
+
+    <script>
+        let buku = JSON.parse(localStorage.getItem("buku")) || [];
+        
+        function tampilkan(){ 
+            document.getElementById("buku").innerHTML = "";
+            
+            buku.forEach((item, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${item.judul}</td>
+                    <td>${item.penulis}</td>
+                    <td>${item.tahun}</td>
+                    <td><img src="${item.cover}" alt="${item.judul}" style="width: 50px; height: auto;"></td>
+                    <td>${item.sinopsis}</td>
+                    <td><button onclick="hapus(${index})">Hapus</button></td>
+                    <td><button onclick="edit(${index})">edit</button></td>
+                `;
+                document.getElementById("buku").appendChild(tr);
+            });
+        }
+        
+        function tambah(){
+            const judul = document.getElementById("judul").value;
+            const penulis = document.getElementById("penulis").value;
+            const tahun = document.getElementById("tahun").value;
+            const cover = document.getElementById("cover").value;
+            const sinopsis = document.getElementById("sinopsis").value;
+
+            if (isNaN(tahun)) {
+                alert("Tahun harus berupa angka");
+                return;
+            } else if (!judul || !penulis || !tahun || !cover || !sinopsis) {
+                alert("Semua data harus diisi");
+                return;
+            }
+
+            
+            
+            const bukuBaru = {judul, penulis, tahun, cover, sinopsis};
+            
+            buku.push(bukuBaru);
+            
+            localStorage.setItem("buku", JSON.stringify(buku));
+            
+            document.getElementById("judul").value = "";
+            document.getElementById("penulis").value = "";
+            document.getElementById("tahun").value = "";
+            document.getElementById("cover").value = "";
+            document.getElementById("sinopsis").value = "";
+            
+        }
+        
+        function hapus(index){
+            buku.splice(index, 1);
+            localStorage.setItem("buku", JSON.stringify(buku));
+            tampilkan();
+        }
+        
+        window.onload = function() {
+            tampilkan();
+        };
+
+        function edit(index) { 
+            const judul = document.getElementById("judul").value = buku[index].judul;
+            const penulis = document.getElementById("penulis").value = buku[index].penulis;
+            const tahun = document.getElementById("tahun").value = buku[index].tahun;
+            const cover = document.getElementById("cover").value = buku[index].cover;
+            const sinopsis = document.getElementById("sinopsis").value = buku[index].sinopsis;
+            tampilkan();
+        }
+    </script>
+</body>
+</html>
